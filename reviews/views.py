@@ -2,6 +2,7 @@ from django.contrib.auth.models import User, Group
 from .models import Review, Category, Business
 from .serializers import UserSerializer, GroupSerializer, ReviewSerializer, CategorySerializer, BusinessSerializer
 from rest_framework import viewsets, permissions
+from django_filters.rest_framework import DjangoFilterBackend
 
 # Create your views here.
 
@@ -28,6 +29,8 @@ class CategoryViewset(viewsets.ModelViewSet):
 class BusinessViewset(viewsets.ModelViewSet):
     queryset = Business.objects.all()
     serializer_class = BusinessSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields =['slug']
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
