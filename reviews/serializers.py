@@ -17,15 +17,40 @@ class ReviewSerializer(serializers.HyperlinkedModelSerializer):
         model = Review
         fields = '__all__'
 
-class CategorySerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Category
-        fields = '__all__'
-        depth = 1
 
-class BusinessSerializer(serializers.HyperlinkedModelSerializer):
+class BusinessSerializer(serializers.HyperlinkedModelSerializer):   
+
     class Meta:
         model = Business
-        fields = '__all__'
+        fields = [
+            'url',
+            'name',
+            'slug',
+            'description',
+            'price_range',
+            'street_address',
+            'city',
+            'region',
+            'postal_code',
+            'country',
+            'website',
+            'phone',
+            'hours',
+            'reviews',
+        ]
+        depth = 1
+
+class CategorySerializer(serializers.HyperlinkedModelSerializer):
+    business = BusinessSerializer(many=True)
+    class Meta:
+        model = Category
+        fields = [
+            'url',
+            'name',
+            'slug',
+            'ordinal',
+            'business',            
+        ]
+        depth = 1
         
 
