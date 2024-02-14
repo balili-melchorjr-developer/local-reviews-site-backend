@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from .models import Review, Category, Business
-from .serializers import UserSerializer, GroupSerializer, ReviewSerializer, CategorySerializer, BusinessSerializer
+from .serializers import UserSerializer, GroupSerializer, ReviewReadSerializer, ReviewWriteSerializer, CategoryReadSerializer, CategoryWriteSerializer, BusinessReadSerializer, BusinessWriteSerializer
 from rest_framework import viewsets, permissions
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -18,19 +18,34 @@ class GroupViewset(viewsets.ModelViewSet):
 
 class ReviewViewset(viewsets.ModelViewSet):
     queryset = Review.objects.all()
-    serializer_class = ReviewSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_serializer_class(self):
+        if self.request.method == 'PUT' or self.request.method == 'POST':
+            return ReviewWriteSerializer
+        else:
+            return ReviewReadSerializer  
+
+class BusinessViewset(viewsets.ModelViewSet):
+    queryset = Business.objects.all()    
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_serializer_class(self):
+        if self.request.method == 'PUT' or self.request.method == 'POST':
+            return BusinessWriteSerializer
+        else:
+            return BusinessReadSerializer
 
 class CategoryViewset(viewsets.ModelViewSet):
     queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]    
-
-class BusinessViewset(viewsets.ModelViewSet):
-    queryset = Business.objects.all()
-    serializer_class = BusinessSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields =['slug']
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_serializer_class(self):
+        if self.request.method == 'PUT' or self.request.method == 'POST':
+            return CategoryWriteSerializer
+        else:
+            return CategoryReadSerializer
 
 

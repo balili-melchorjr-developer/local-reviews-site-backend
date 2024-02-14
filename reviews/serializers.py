@@ -12,13 +12,19 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         model = Group
         fields = ['url', 'name']
 
-class ReviewSerializer(serializers.HyperlinkedModelSerializer):
+class ReviewReadSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Review
+        fields = '__all__'
+        depth = 1
+
+class ReviewWriteSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Review
         fields = '__all__'
 
 
-class BusinessSerializer(serializers.HyperlinkedModelSerializer):   
+class BusinessReadSerializer(serializers.HyperlinkedModelSerializer):   
 
     class Meta:
         model = Business
@@ -40,8 +46,29 @@ class BusinessSerializer(serializers.HyperlinkedModelSerializer):
         ]
         depth = 1
 
-class CategorySerializer(serializers.HyperlinkedModelSerializer):
-    business = BusinessSerializer(many=True)
+class BusinessWriteSerializer(serializers.HyperlinkedModelSerializer):   
+
+    class Meta:
+        model = Business
+        fields = [
+            'url',
+            'name',
+            'slug',
+            'description',
+            'price_range',
+            'street_address',
+            'city',
+            'region',
+            'postal_code',
+            'country',
+            'website',
+            'phone',
+            'hours',
+            'reviews',
+        ]
+
+class CategoryReadSerializer(serializers.HyperlinkedModelSerializer):
+    business = BusinessReadSerializer(many=True)
     class Meta:
         model = Category
         fields = [
@@ -52,5 +79,17 @@ class CategorySerializer(serializers.HyperlinkedModelSerializer):
             'business',            
         ]
         depth = 1
+
+class CategoryWriteSerializer(serializers.HyperlinkedModelSerializer):
+    
+    class Meta:
+        model = Category
+        fields = [
+            'url',
+            'name',
+            'slug',
+            'ordinal',
+            'business',            
+        ]
         
 
