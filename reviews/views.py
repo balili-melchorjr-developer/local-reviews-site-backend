@@ -18,7 +18,7 @@ class GroupViewset(viewsets.ModelViewSet):
 
 class ReviewViewset(viewsets.ModelViewSet):
     queryset = Review.objects.all()
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.AllowAny]
 
     def get_serializer_class(self):
         if self.request.method == 'PUT' or self.request.method == 'POST':
