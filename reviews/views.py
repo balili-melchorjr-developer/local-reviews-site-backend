@@ -2,6 +2,7 @@ from django.contrib.auth.models import User, Group
 from .models import Review, Category, Business
 from .serializers import UserSerializer, GroupSerializer, ReviewReadSerializer, ReviewWriteSerializer, CategoryReadSerializer, CategoryWriteSerializer, BusinessReadSerializer, BusinessWriteSerializer
 from rest_framework import viewsets, permissions
+from rest_framework.generics import RetrieveAPIView
 from django_filters.rest_framework import DjangoFilterBackend
 
 # Create your views here.
@@ -47,5 +48,13 @@ class CategoryViewset(viewsets.ModelViewSet):
             return CategoryWriteSerializer
         else:
             return CategoryReadSerializer
+        
+
+class UserApiView(RetrieveAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = UserSerializer
+
+    def get_object(self):
+        return self.request.user
 
 
