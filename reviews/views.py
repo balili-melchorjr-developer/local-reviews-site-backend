@@ -1,8 +1,8 @@
 from django.contrib.auth.models import User, Group
 from .models import Review, Category, Business
-from .serializers import UserSerializer, GroupSerializer, ReviewReadSerializer, ReviewWriteSerializer, CategoryReadSerializer, CategoryWriteSerializer, BusinessReadSerializer, BusinessWriteSerializer
+from .serializers import UserSerializer, GroupSerializer, ReviewReadSerializer, ReviewWriteSerializer, CategoryReadSerializer, CategoryWriteSerializer, BusinessReadSerializer, BusinessWriteSerializer, RegisterUserSerializer
 from rest_framework import viewsets, permissions
-from rest_framework.generics import RetrieveAPIView
+from rest_framework.generics import RetrieveAPIView, CreateAPIView
 from django_filters.rest_framework import DjangoFilterBackend
 
 # Create your views here.
@@ -11,6 +11,7 @@ class UserViewset(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
+
 
 class GroupViewset(viewsets.ModelViewSet):
     queryset = Group.objects.all()
@@ -50,11 +51,15 @@ class CategoryViewset(viewsets.ModelViewSet):
             return CategoryReadSerializer
         
 
-class UserApiView(RetrieveAPIView):
+class UserAPIView(RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = UserSerializer
 
     def get_object(self):
         return self.request.user
+    
+class RegisterUserAPIView(CreateAPIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = RegisterUserSerializer
 
 
